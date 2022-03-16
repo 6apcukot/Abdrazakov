@@ -2,21 +2,24 @@ import RPi.GPIO as GPIO
 import time
 
 GPIO.setmode(GPIO.BCM)   
+pin = 22
+GPIO.setup(pin, GPIO.OUT)
 
-GPIO.setup(26, GPIO.OUT)
+p = GPIO.PWM(pin, 1000)
 
 
-def decimal2binary(value):
-    return [int(bit) for bit in bin(value)[2:].zfill(8)]
+
 
 try:
-    s = float(input("Скважность: "))
     while(1):
+        s = float(input("Скважность: "))
+        i
+        if s == 0:
+            s = 1
+        p.start(1/s*100)
         
-        GPIO.output(26, 1)
-        time.sleep(0.02/s)
-        GPIO.output(26, 0)
-        time.sleep(0.02 - 0.02/s)
+        if input("Press q to stop: ") == 'q':
+            break
 finally:
-    GPIO.output(26, 0)
+    GPIO.output(pin, 0)
     GPIO.cleanup()
