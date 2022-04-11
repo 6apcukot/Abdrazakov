@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef int Data;
+
+struct Node {
+    Data val;            // данные в узле
+    struct Node * left;  // левый ребенок
+    struct Node * right; // правый ребенок
+};
+
+//void makers(struct Node * p, Data x){
+  //              p = (struct Node *) malloc(sizeof(Node));
+    //            p->left = NULL;
+      //          p->right = NULL;
+        //        p->val = x;
+//}
+struct Node * tree_add (struct Node * tree, Data x){
+        if(tree == NULL){
+            tree = (struct Node *) malloc(sizeof(struct Node));
+            tree->left = NULL;      
+            tree->right = NULL;
+            tree->val = x;
+            
+        }
+        if(x > tree->val ){
+            if(tree->right == NULL){
+                //makers(tree->right, x);
+                 
+                struct Node * p = (struct Node *) malloc(sizeof(struct Node) + 4);
+                tree->right = p;
+                p->left = NULL;
+                p->right = NULL;
+                p->val = x;
+                //return tree->right;
+            }else{
+                //return 
+                tree_add(tree->right, x); 
+            }
+        }else if(x < tree->val){
+            if(tree->left == NULL){
+                //makers(tree->left, x);
+                struct Node * p = (struct Node *) malloc(sizeof(struct Node));
+                tree->left = p;
+                p->left = NULL;
+                p->right = NULL;
+                p->val = x;
+                //return tree->left;
+            }else{
+                //return 
+                tree_add(tree->left, x); 
+            }
+    }
+    return tree;
+}
+
+void tree_print (struct Node * tree){
+    if(tree->left != NULL){
+        tree_print(tree->left);
+    }else{
+        //printf("%d ", tree->val);
+    }
+    printf("%d ", tree->val);
+    if(tree->right != NULL){
+        tree_print(tree->right);
+    }
+}
+
+struct Node * find(struct Node * tree, Data x){
+    if(x == tree->val){
+        return tree;
+    }else if(x > tree->val){
+        find(tree->right, x);
+    }else{
+        find(tree->left, x);
+    }
+}
+
+struct Node * sledu(struct Node * tree, Data x){
+    if(tree->right == NULL){
+        return tree;
+    }
+    while((tree->right)->right != NULL){
+        return sledu(tree->right, x);
+    }
+    return tree;
+}
+
+void deleter(struct Node * tree, Data x){
+    //struct Node * del = (struct Node *) malloc(sizeof(struct Node));
+    struct Node * del = find(tree, x);
+    //struct Node * sled = (struct Node *) malloc(sizeof(struct Node));
+    struct Node * sled = sledu(del->left, x);
+    //struct Node * max = (struct Node *) malloc(sizeof(struct Node));
+    struct Node * max = sled->right;
+    del->val = max->val;
+    sled->right = max->left;
+    free(max);
+}
+
+int main()
+{
+    struct Node * tree=NULL;
+    tree = tree_add(tree, 7);
+    tree = tree_add(tree, 3);
+    tree = tree_add(tree, 2);
+    tree = tree_add(tree, 1);
+    tree = tree_add(tree, 9);
+    tree = tree_add(tree, 5);
+    tree = tree_add(tree, 4);
+    tree = tree_add(tree, 6);
+    tree = tree_add(tree, 8);
+    deleter(tree, 5);
+    //deleter(tree, 3);
+    tree_print(tree);
+    return 0;
+}
